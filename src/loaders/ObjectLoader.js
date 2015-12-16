@@ -357,16 +357,16 @@ Object.assign( ObjectLoader.prototype, {
 				scope.manager.itemEnd( url );
 
 			}, undefined, function () {
-
 				scope.manager.itemError( url );
 
-			} );
+			});
 
 		}
 
 		if ( json !== undefined && json.length > 0 ) {
 
 			var manager = new LoadingManager( onLoad );
+			manager.setAllowErrors(true);
 
 			var loader = new ImageLoader( manager );
 			loader.setCrossOrigin( this.crossOrigin );
