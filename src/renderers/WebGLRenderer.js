@@ -1483,13 +1483,13 @@ function WebGLRenderer( parameters ) {
 
 			}
 
-		}
+			var children = object.children;
 
-		var children = object.children;
+			for ( var i = 0, l = children.length; i < l; i ++ ) {
 
-		for ( var i = 0, l = children.length; i < l; i ++ ) {
+				projectObject( children[ i ], camera );
 
-			projectObject( children[ i ], camera );
+			}
 
 		}
 
