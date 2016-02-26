@@ -32,6 +32,7 @@ function WebGLLights() {
 						shadow: false,
 						shadowBias: 0,
 						shadowRadius: 1,
+						shadowDarkness: 1,
 						shadowMapSize: new Vector2()
 					};
 					break;
@@ -49,6 +50,7 @@ function WebGLLights() {
 						shadow: false,
 						shadowBias: 0,
 						shadowRadius: 1,
+						shadowDarkness: 1,
 						shadowMapSize: new Vector2()
 					};
 					break;
@@ -63,6 +65,7 @@ function WebGLLights() {
 						shadow: false,
 						shadowBias: 0,
 						shadowRadius: 1,
+						shadowDarkness: 1,
 						shadowMapSize: new Vector2()
 					};
 					break;

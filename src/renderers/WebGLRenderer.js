@@ -2350,6 +2350,8 @@ function WebGLRenderer( parameters ) {
 					uniforms.shadowBias = light.shadow.bias;
 					uniforms.shadowRadius = light.shadow.radius;
 					uniforms.shadowMapSize = light.shadow.mapSize;
+					uniforms.shadowDarkness = light.shadow.darkness;
+
 
 				}
 
@@ -2383,6 +2385,8 @@ function WebGLRenderer( parameters ) {
 					uniforms.shadowBias = light.shadow.bias;
 					uniforms.shadowRadius = light.shadow.radius;
 					uniforms.shadowMapSize = light.shadow.mapSize;
+					
+					uniforms.shadowDarkness = light.shadow.darkness;
 
 				}
 
@@ -2408,6 +2412,8 @@ function WebGLRenderer( parameters ) {
 					uniforms.shadowBias = light.shadow.bias;
 					uniforms.shadowRadius = light.shadow.radius;
 					uniforms.shadowMapSize = light.shadow.mapSize;
+					uniforms.shadowDarkness = light.shadow.darkness;
+					
 
 				}
 

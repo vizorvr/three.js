@@ -49,7 +49,7 @@
 
 	}
 
-	float getShadow( sampler2D shadowMap, vec2 shadowMapSize, float shadowBias, float shadowRadius, vec4 shadowCoord ) {
+	float getShadow( sampler2D shadowMap, vec2 shadowMapSize, float shadowBias, float shadowRadius, float shadowDarkness, vec4 shadowCoord ) {
 
 		shadowCoord.xyz /= shadowCoord.w;
 		shadowCoord.z += shadowBias;
@@ -75,7 +75,7 @@
 			float dx1 = + texelSize.x * shadowRadius;
 			float dy1 = + texelSize.y * shadowRadius;
 
-			return (
+			return 1.0 - (1.0 - (
 				texture2DCompare( shadowMap, shadowCoord.xy + vec2( dx0, dy0 ), shadowCoord.z ) +
 				texture2DCompare( shadowMap, shadowCoord.xy + vec2( 0.0, dy0 ), shadowCoord.z ) +
 				texture2DCompare( shadowMap, shadowCoord.xy + vec2( dx1, dy0 ), shadowCoord.z ) +
@@ -85,7 +85,7 @@
 				texture2DCompare( shadowMap, shadowCoord.xy + vec2( dx0, dy1 ), shadowCoord.z ) +
 				texture2DCompare( shadowMap, shadowCoord.xy + vec2( 0.0, dy1 ), shadowCoord.z ) +
 				texture2DCompare( shadowMap, shadowCoord.xy + vec2( dx1, dy1 ), shadowCoord.z )
-			) * ( 1.0 / 9.0 );
+			) * ( 1.0 / 9.0 )) * shadowDarkness;
 
 		#elif defined( SHADOWMAP_TYPE_PCF_SOFT )
 
@@ -96,7 +96,7 @@
 			float dx1 = + texelSize.x * shadowRadius;
 			float dy1 = + texelSize.y * shadowRadius;
 
-			return (
+			return 1.0 - (1.0 - (
 				texture2DShadowLerp( shadowMap, shadowMapSize, shadowCoord.xy + vec2( dx0, dy0 ), shadowCoord.z ) +
 				texture2DShadowLerp( shadowMap, shadowMapSize, shadowCoord.xy + vec2( 0.0, dy0 ), shadowCoord.z ) +
 				texture2DShadowLerp( shadowMap, shadowMapSize, shadowCoord.xy + vec2( dx1, dy0 ), shadowCoord.z ) +
@@ -106,11 +106,11 @@
 				texture2DShadowLerp( shadowMap, shadowMapSize, shadowCoord.xy + vec2( dx0, dy1 ), shadowCoord.z ) +
 				texture2DShadowLerp( shadowMap, shadowMapSize, shadowCoord.xy + vec2( 0.0, dy1 ), shadowCoord.z ) +
 				texture2DShadowLerp( shadowMap, shadowMapSize, shadowCoord.xy + vec2( dx1, dy1 ), shadowCoord.z )
-			) * ( 1.0 / 9.0 );
+			) * ( 1.0 / 9.0 )) * shadowDarkness;
 
 		#else // no percentage-closer filtering:
 
-			return texture2DCompare( shadowMap, shadowCoord.xy, shadowCoord.z );
+			return 1.0 - (1.0 - texture2DCompare( shadowMap, shadowCoord.xy, shadowCoord.z )) * shadowDarkness;
 
 		#endif
 
@@ -191,7 +191,7 @@
 
 	}
 
-	float getPointShadow( sampler2D shadowMap, vec2 shadowMapSize, float shadowBias, float shadowRadius, vec4 shadowCoord ) {
+	float getPointShadow( sampler2D shadowMap, vec2 shadowMapSize, float shadowBias, float shadowRadius, float shadowDarkness, vec4 shadowCoord ) {
 
 		vec2 texelSize = vec2( 1.0 ) / ( shadowMapSize * vec2( 4.0, 2.0 ) );
 
@@ -208,7 +208,7 @@
 
 			vec2 offset = vec2( - 1, 1 ) * shadowRadius * texelSize.y;
 
-			return (
+			return 1.0 - (1.0 - (
 				texture2DCompare( shadowMap, cubeToUV( bd3D + offset.xyy, texelSize.y ), dp ) +
 				texture2DCompare( shadowMap, cubeToUV( bd3D + offset.yyy, texelSize.y ), dp ) +
 				texture2DCompare( shadowMap, cubeToUV( bd3D + offset.xyx, texelSize.y ), dp ) +
@@ -218,11 +218,11 @@
 				texture2DCompare( shadowMap, cubeToUV( bd3D + offset.yxy, texelSize.y ), dp ) +
 				texture2DCompare( shadowMap, cubeToUV( bd3D + offset.xxx, texelSize.y ), dp ) +
 				texture2DCompare( shadowMap, cubeToUV( bd3D + offset.yxx, texelSize.y ), dp )
-			) * ( 1.0 / 9.0 );
+			) * ( 1.0 / 9.0 )) * shadowDarkness;
 
 		#else // no percentage-closer filtering
 
-			return texture2DCompare( shadowMap, cubeToUV( bd3D, texelSize.y ), dp );
+			return 1.0 - (1.0 - texture2DCompare( shadowMap, cubeToUV( bd3D, texelSize.y ), dp )) * shadowDarkness;
 
 		#endif
 

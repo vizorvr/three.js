@@ -32,6 +32,7 @@ function WebGLPrograms( renderer, capabilities ) {
 		"maxMorphTargets", "maxMorphNormals", "premultipliedAlpha",
 		"numDirLights", "numPointLights", "numSpotLights", "numHemiLights",
 		"shadowMapEnabled", "shadowMapType", "toneMapping", 'physicallyCorrectLights',
+		"shadowDarkness",
 		"alphaTest", "doubleSided", "flipSided", "numClippingPlanes", "depthPacking"
 	];
 

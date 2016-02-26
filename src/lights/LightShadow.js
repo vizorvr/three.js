@@ -11,6 +11,7 @@ function LightShadow( camera ) {
 
 	this.bias = 0;
 	this.radius = 1;
+	this.darkness = 1;
 
 	this.mapSize = new Vector2( 512, 512 );
 
@@ -27,6 +28,7 @@ Object.assign( LightShadow.prototype, {
 
 		this.bias = source.bias;
 		this.radius = source.radius;
+		this.darkness = source.darkness;
 
 		this.mapSize.copy( source.mapSize );
 

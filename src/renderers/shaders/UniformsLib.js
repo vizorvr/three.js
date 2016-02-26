@@ -100,6 +100,7 @@ var UniformsLib = {
 			shadow: {},
 			shadowBias: {},
 			shadowRadius: {},
+			shadowDarkness: {},
 			shadowMapSize: {}
 		} },
 
@@ -118,6 +119,7 @@ var UniformsLib = {
 			shadow: {},
 			shadowBias: {},
 			shadowRadius: {},
+			shadowDarkness: {},
 			shadowMapSize: {}
 		} },
 
@@ -133,6 +135,7 @@ var UniformsLib = {
 			shadow: {},
 			shadowBias: {},
 			shadowRadius: {},
+			shadowDarkness: {},
 			shadowMapSize: {}
 		} },
 

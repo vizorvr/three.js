@@ -23,6 +23,7 @@ vec3 getAmbientLightIrradiance( const in vec3 ambientLightColor ) {
 		int shadow;
 		float shadowBias;
 		float shadowRadius;
+		float shadowDarkness;
 		vec2 shadowMapSize;
 	};
 
@@ -50,6 +51,7 @@ vec3 getAmbientLightIrradiance( const in vec3 ambientLightColor ) {
 		int shadow;
 		float shadowBias;
 		float shadowRadius;
+		float shadowDarkness;
 		vec2 shadowMapSize;
 	};
 
@@ -96,6 +98,7 @@ vec3 getAmbientLightIrradiance( const in vec3 ambientLightColor ) {
 		int shadow;
 		float shadowBias;
 		float shadowRadius;
+		float shadowDarkness;
 		vec2 shadowMapSize;
 	};
 
