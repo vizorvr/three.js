@@ -30,7 +30,19 @@ Object.assign( FontLoader.prototype, {
 			} catch ( e ) {
 
 				console.warn( 'THREE.FontLoader: typeface.js support is being deprecated. Use typeface.json instead.' );
-				json = JSON.parse( text.substring( 65, text.length - 2 ) );
+	
+				var fontDataMarker = 'loadFace('
+				var fontDataStart = text.indexOf(fontDataMarker)
+
+				var fontData = text
+				if (fontDataStart === -1) {
+					fontData = text
+				}
+				else {
+					fontData = text.substring( fontDataStart + fontDataMarker.length, text.length - 2 )
+				}
+				
+				json = JSON.parse( fontData );
 
 			}
 
