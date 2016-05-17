@@ -14,7 +14,6 @@ THREE.glTFAnimator = ( function () {
 
 		remove: function(animator)
 		{
-
 			var i = animators.indexOf(animator);
 
 			if ( i !== -1 ) {
@@ -24,11 +23,94 @@ THREE.glTFAnimator = ( function () {
 
 		update : function()
 		{
-			for (i = 0; i < animators.length; i++)
+			for (var i = 0; i < animators.length; i++)
 			{
 				animators[i].update();
 			}
 		},
+
+		cloneAnimationBindings: function(source, target) {
+			var newAnimations = []
+
+			for (var i = 0; i < animators.length; ++i) {
+				var animator = animators[i]
+
+				var newInterps = []
+
+				// collect interps that need to be cloned from this animation
+				for (var j = 0; j < animator.interps.length; ++j) {
+					var interp = animator.interps[j]
+
+					source.traverse(function(n) {
+						if (n === interp.targetNode && newInterps.indexOf(interp) === -1) {
+							newInterps.push(interp)
+						}
+					})
+				}
+
+				// create new interp definitions
+				if (newInterps.length > 0) {
+					var interpDescs = []
+
+					for (var j = 0; j < newInterps.length; ++j) {
+						var interp = newInterps[j]
+
+						function traverseAndClone(source, target) {
+							if (source === interp.targetNode.skin) {
+
+								var targetIdx = source.skeleton.bones.indexOf(interp.targetNode)
+
+								if (targetIdx === -1) {
+									console.error('glTFAnimator.cloneAnimationBindings: cannot find target node')
+								}
+
+								interpDescs.push({
+									keys: interp.keys.slice(),
+									values: interp.values.slice(),
+									count: interp.count,
+									type: interp.type,
+									path: interp.path,
+									target: target.skeleton.bones[targetIdx]
+								})
+
+								// found the match, break out
+								return true
+							}
+							else if (source === interp.targetNode) {
+								interpDescs.push({
+									keys: interp.keys.slice(),
+									values: interp.values.slice(),
+									count: interp.count,
+									type: interp.type,
+									path: interp.path,
+									target: target
+								})
+
+								return true
+							}
+
+							for (var i = 0; i < source.children.length; ++i) {
+								if (traverseAndClone(source.children[i], target.children[i])) {
+									return true
+								}
+							}
+
+							return false
+						}
+
+						traverseAndClone(source, target)
+					}
+
+					var newAnim = new THREE.glTFAnimation(interpDescs)
+					newAnim.loop = animator.loop
+					newAnimations.push(newAnim)
+				}
+			}
+
+			for (var i = 0; i < newAnimations.length; ++i) {
+				newAnimations[i].play()
+			}
+		}
 	};
 })();
 
