@@ -42,12 +42,13 @@ THREE.GLTFLoaderUtils = Object.create(Object, {
     _storeResource: {
         enumerable: false,
         value: function(resourceID, resource) {
+            console.log('storing resource', resourceID)
             if (!resourceID) {
                 console.log("ERROR: entry does not contain id, cannot store");
                 return;
             }
 
-            if (this._containsResource[resourceID]) {
+            if (this._containsResource(resourceID)) {
                 console.log("WARNING: resource:"+resourceID+" is already stored, overriding");
             }
 
@@ -115,6 +116,7 @@ THREE.GLTFLoaderUtils = Object.create(Object, {
             }
 
             var dataUriRegexResult = dataUriRegex.exec(path);
+            console.log('resource available', path, dataUriRegexResult !== null)
             if (dataUriRegexResult !== null) {
                 delegate.streamAvailable(path, decodeDataUri(dataUriRegexResult, type));
                 return;
@@ -156,6 +158,7 @@ THREE.GLTFLoaderUtils = Object.create(Object, {
 
     _handleRequest: {
         value: function(request) {
+            console.log('requesting', request.id)
             var resourceStatus = this._resourcesStatus[request.id];
             if (resourceStatus)
             {
@@ -172,7 +175,12 @@ THREE.GLTFLoaderUtils = Object.create(Object, {
             	streamStatus.requests.push(request);
                 return;
             }
-            
+
+            if (this._streamsStatus[request.uri]) {
+                console.log('already loading', request.uri)
+                debugger;
+            }
+
             this._streamsStatus[request.uri] = { status : "loading", requests : [request] };
     		
             var self = this;
@@ -180,8 +188,15 @@ THREE.GLTFLoaderUtils = Object.create(Object, {
 
             processResourceDelegate.streamAvailable = function(path, res_) {
             	var streamStatus = self._streamsStatus[path];
-            	var requests = streamStatus.requests;
+
+                if (!streamStatus) {
+                    debugger;
+                    return
+                }
+
+                var requests = streamStatus.requests;
                 requests.forEach( function(req_) {
+                    console.log('\t', req_.uri)
                     var subArray = res_.slice(req_.range[0], req_.range[1]);
                     var convertedResource = req_.delegate.convert(subArray, req_.ctx);
                     self._storeResource(req_.id, convertedResource);
