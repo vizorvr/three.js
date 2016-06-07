@@ -131,26 +131,30 @@ SkinnedMesh.prototype = Object.assign( Object.create( Mesh.prototype ), {
 
 			var skinWeight = this.geometry.attributes.skinWeight;
 
+		if ( skinWeight ) {
+
 			for ( var i = 0; i < skinWeight.count; i ++ ) {
 
-				vec.x = skinWeight.getX( i );
-				vec.y = skinWeight.getY( i );
-				vec.z = skinWeight.getZ( i );
-				vec.w = skinWeight.getW( i );
-
-				var scale = 1.0 / vec.lengthManhattan();
-
-				if ( scale !== Infinity ) {
-
-					vec.multiplyScalar( scale );
-
-				} else {
-
-					vec.set( 1, 0, 0, 0 ); // do something reasonable
-
+					vec.x = skinWeight.getX( i );
+					vec.y = skinWeight.getY( i );
+					vec.z = skinWeight.getZ( i );
+					vec.w = skinWeight.getW( i );
+	
+					var scale = 1.0 / vec.lengthManhattan();
+	
+					if ( scale !== Infinity ) {
+	
+						vec.multiplyScalar( scale );
+	
+					} else {
+	
+						vec.set( 1, 0, 0, 0 ); // do something reasonable
+	
+					}
+	
+					skinWeight.setXYZW( i, vec.x, vec.y, vec.z, vec.w );
+		
 				}
-
-				skinWeight.setXYZW( i, vec.x, vec.y, vec.z, vec.w );
 
 			}
 
@@ -180,8 +184,18 @@ SkinnedMesh.prototype = Object.assign( Object.create( Mesh.prototype ), {
 
 	clone: function() {
 
-		return new this.constructor( this.geometry, this.material, this.skeleton.useVertexTexture ).copy( this );
+		var boneInverses = this.skeleton.boneInverses.slice()
+		return new this.constructor( this.geometry, this.material, this.skeleton.useVertexTexture ).copy( this, false );
 
+		newSkinnedMesh.skeleton.boneInverses = []
+		for ( var i = 0; i < boneInverses.length; ++ i ) {
+
+			newSkinnedMesh.skeleton.boneInverses.push( boneInverses[ i ] )
+
+		}
+
+		return newSkinnedMesh	
+		
 	}
 
 } );

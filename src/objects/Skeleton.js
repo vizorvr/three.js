@@ -178,7 +178,15 @@ Object.assign( Skeleton.prototype, {
 
 	clone: function () {
 
-		return new Skeleton( this.bones, this.boneInverses, this.useVertexTexture );
+		var newBones = []
+
+		for ( var i = 0; i < this.bones.length; ++ i ) {
+		
+			newBones.push( this.bones[ i ].clone( /*recursive = */true ) )
+	
+		}
+
+		return new Skeleton( newBones, undefined, this.useVertexTexture );
 
 	}
 
