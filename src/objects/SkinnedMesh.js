@@ -185,7 +185,7 @@ SkinnedMesh.prototype = Object.assign( Object.create( Mesh.prototype ), {
 	clone: function() {
 
 		var boneInverses = this.skeleton.boneInverses.slice()
-		return new this.constructor( this.geometry, this.material, this.skeleton.useVertexTexture ).copy( this, false );
+		var newSkinnedMesh = new this.constructor( this.geometry, this.material, this.skeleton.useVertexTexture ).copy( this, false );
 
 		newSkinnedMesh.skeleton.boneInverses = []
 		for ( var i = 0; i < boneInverses.length; ++ i ) {
