@@ -258,7 +258,7 @@ function GPUComputationRenderer( sizeX, sizeY, renderer ) {
 
 		materialShader.defines.resolution = 'vec2( ' + sizeX.toFixed( 1 ) + ', ' + sizeY.toFixed( 1 ) + " )";
 
-	};
+	}
 	this.addResolutionDefine = addResolutionDefine;
 
 
@@ -277,7 +277,7 @@ function GPUComputationRenderer( sizeX, sizeY, renderer ) {
 		addResolutionDefine( material );
 
 		return material;
-	};
+	}
 	this.createShaderMaterial = createShaderMaterial;
 
 	this.createRenderTarget = function( sizeXTexture, sizeYTexture, wrapS, wrapT, minFilter, magFilter ) {
@@ -298,19 +298,17 @@ function GPUComputationRenderer( sizeX, sizeY, renderer ) {
 			magFilter: magFilter,
 			format: THREE.RGBAFormat,
 			type: ( /(iPad|iPhone|iPod)/g.test( navigator.userAgent ) ) ? THREE.HalfFloatType : THREE.FloatType,
-			stencilBuffer: false
+			stencilBuffer: false,
+			depthBuffer: false
 		} );
 
 		return renderTarget;
 
 	};
 
-    this.createTexture = function( sizeXTexture, sizeYTexture ) {
+	this.createTexture = function() {
 
-		sizeXTexture = sizeXTexture || sizeX;
-		sizeYTexture = sizeYTexture || sizeY;
-
-		var a = new Float32Array( sizeXTexture * sizeYTexture * 4 );
+		var a = new Float32Array( sizeX * sizeY * 4 );
 		var texture = new THREE.DataTexture( a, sizeX, sizeY, THREE.RGBAFormat, THREE.FloatType );
 		texture.needsUpdate = true;
 
