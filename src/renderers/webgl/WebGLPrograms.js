@@ -32,7 +32,8 @@ function WebGLPrograms( renderer, capabilities ) {
 		"maxMorphTargets", "maxMorphNormals", "premultipliedAlpha",
 		"numDirLights", "numPointLights", "numSpotLights", "numHemiLights",
 		"shadowMapEnabled", "shadowMapType", "toneMapping", 'physicallyCorrectLights',
-		"alphaTest", "doubleSided", "flipSided", "numClippingPlanes", "depthPacking"
+		"alphaTest", "doubleSided", "flipSided", "numClippingPlanes", "depthPacking",
+		"instanced"
 	];
 
 
@@ -169,6 +170,8 @@ function WebGLPrograms( renderer, capabilities ) {
 			skinning: material.skinning,
 			maxBones: maxBones,
 			useVertexTexture: capabilities.floatVertexTextures && object && object.skeleton && object.skeleton.useVertexTexture,
+
+			instanced: material.instanced,
 
 			morphTargets: material.morphTargets,
 			morphNormals: material.morphNormals,

@@ -104,6 +104,8 @@ MeshBasicMaterial.prototype.copy = function ( source ) {
 	this.skinning = source.skinning;
 	this.morphTargets = source.morphTargets;
 
+	this.instanced = source.instanced;
+
 	return this;
 
 };

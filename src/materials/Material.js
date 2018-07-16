@@ -51,6 +51,7 @@ function Material() {
 
 	this.alphaTest = 0;
 	this.premultipliedAlpha = false;
+	this.instanced = false; // this is used to draw default instanced stuff with MultiMesh
 
 	this.overdraw = 0; // Overdrawn pixels (typically between 0 and 1) for fixing antialiasing gaps in CanvasRenderer
 
@@ -221,6 +222,8 @@ Material.prototype = {
 
 		data.skinning = this.skinning;
 		data.morphTargets = this.morphTargets;
+
+        data.instanced = this.instanced;
 
 		// TODO: Copied from Object3D.toJSON
 

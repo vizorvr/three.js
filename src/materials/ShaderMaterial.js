@@ -107,6 +107,8 @@ ShaderMaterial.prototype.copy = function ( source ) {
 
 	this.extensions = source.extensions;
 
+    this.instanced = source.instanced;
+
 	return this;
 
 };

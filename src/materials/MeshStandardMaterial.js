@@ -168,6 +168,8 @@ MeshStandardMaterial.prototype.copy = function ( source ) {
 	this.morphTargets = source.morphTargets;
 	this.morphNormals = source.morphNormals;
 
+    this.instanced = source.instanced;
+
 	return this;
 
 };

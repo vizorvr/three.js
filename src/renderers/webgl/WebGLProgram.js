@@ -340,6 +340,8 @@ function WebGLProgram( renderer, code, material, parameters ) {
 
 			parameters.flatShading ? '#define FLAT_SHADED' : '',
 
+            parameters.instanced ? '#define USE_INSTANCING' : '',
+
 			parameters.skinning ? '#define USE_SKINNING' : '',
 			parameters.useVertexTexture ? '#define BONE_TEXTURE' : '',
 
@@ -406,6 +408,14 @@ function WebGLProgram( renderer, code, material, parameters ) {
 			'	attribute vec4 skinWeight;',
 
 			'#endif',
+
+            '#ifdef USE_INSTANCING',
+
+            '	attribute vec4 instanceMatrix0;',
+            '	attribute vec4 instanceMatrix1;',
+            '	attribute vec4 instanceMatrix2;',
+
+            '#endif',
 
 			'\n'
 

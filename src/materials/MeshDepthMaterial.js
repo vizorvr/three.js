@@ -78,6 +78,8 @@ MeshDepthMaterial.prototype.copy = function ( source ) {
 	this.wireframe = source.wireframe;
 	this.wireframeLinewidth = source.wireframeLinewidth;
 
+    this.instanced = source.instanced;
+
 	return this;
 
 };
