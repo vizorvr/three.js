@@ -47,7 +47,6 @@ MultiMesh.prototype = Object.assign( Object.create( Mesh.prototype ), {
         var worldMatrix = this._worldMatrices[index];
         worldMatrix.multiplyMatrices(this.matrixWorld, matrix);
         worldMatrix.copy(matrix);
-        console.log(worldMatrix);
     },
 
     getMatrix: function (id, target)
