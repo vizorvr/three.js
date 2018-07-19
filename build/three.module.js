@@ -25584,9 +25584,13 @@ MultiBufferGeometry.prototype = Object.assign(Object.create(InstancedBufferGeome
         this.indexToID[index] = id;
         this.idToIndex[id] = index;
 
-        this._pushInstanceAttribData(this._matAttrib0, 1, 0, 0, 0);
-        this._pushInstanceAttribData(this._matAttrib1, 0, 1, 0, 0);
-        this._pushInstanceAttribData(this._matAttrib2, 0, 0, 1, 0);
+        this._matAttrib0 = this._pushInstanceAttribData(this._matAttrib0, 1, 0, 0, 0);
+        this._matAttrib1 = this._pushInstanceAttribData(this._matAttrib1, 0, 1, 0, 0);
+        this._matAttrib2 = this._pushInstanceAttribData(this._matAttrib2, 0, 0, 1, 0);
+
+        this.addAttribute("instanceMatrix0", this._matAttrib0);
+        this.addAttribute("instanceMatrix1", this._matAttrib1);
+        this.addAttribute("instanceMatrix2", this._matAttrib2);
 
         return id;
     },
@@ -25601,9 +25605,13 @@ MultiBufferGeometry.prototype = Object.assign(Object.create(InstancedBufferGeome
 
         --this.maxInstancedCount;
 
-        this._removeInstanceAttribData(this._matAttrib0, index);
-        this._removeInstanceAttribData(this._matAttrib1, index);
-        this._removeInstanceAttribData(this._matAttrib2, index);
+        this._matAttrib0 = this._removeInstanceAttribData(this._matAttrib0, index);
+        this._matAttrib1 = this._removeInstanceAttribData(this._matAttrib1, index);
+        this._matAttrib2 = this._removeInstanceAttribData(this._matAttrib2, index);
+
+        this.addAttribute("instanceMatrix0", this._matAttrib0);
+        this.addAttribute("instanceMatrix1", this._matAttrib1);
+        this.addAttribute("instanceMatrix2", this._matAttrib2);
     },
 
     setMatrix: function (id, matrix)
@@ -25673,9 +25681,9 @@ MultiBufferGeometry.prototype = Object.assign(Object.create(InstancedBufferGeome
     {
         BufferGeometry.prototype.copy.call(this, geometry);
 
-        this._matAttrib0 = new InstancedBufferAttribute(new Float32Array([]), 4, 1).setDynamic(true);
-        this._matAttrib1 = new InstancedBufferAttribute(new Float32Array([]), 4, 1).setDynamic(true);
-        this._matAttrib2 = new InstancedBufferAttribute(new Float32Array([]), 4, 1).setDynamic(true);
+        this._matAttrib0 = this._createMatrixAttrib();
+        this._matAttrib1 = this._createMatrixAttrib();
+        this._matAttrib2 = this._createMatrixAttrib();
         this.addAttribute("instanceMatrix0", this._matAttrib0);
         this.addAttribute("instanceMatrix1", this._matAttrib1);
         this.addAttribute("instanceMatrix2", this._matAttrib2);
@@ -25701,7 +25709,8 @@ MultiBufferGeometry.prototype = Object.assign(Object.create(InstancedBufferGeome
         var arr = attrib.array;
         var s = index << 2;
         var srcLen = arr.length;
-        var newArray = new Float32Array(srcLen - 4);
+        var newAttrib = this._createMatrixAttrib(srcLen - 4);
+        var newArray = newAttrib.array;
 
         for (var i = 0; i < s; ++i) {
             newArray[i] = arr[i];
@@ -25711,16 +25720,15 @@ MultiBufferGeometry.prototype = Object.assign(Object.create(InstancedBufferGeome
             newArray[i] =  arr[j];
         }
 
-        attrib.array = newArray;
-        attrib.needsUpdate = true;
-        --attrib.count;
+        return newAttrib;
     },
 
     _pushInstanceAttribData: function(attrib, m0, m1, m2, m3)
     {
         var arr = attrib.array;
         var srcLen = arr.length;
-        var newArray = new Float32Array(srcLen + 4);
+        var newAttrib = this._createMatrixAttrib(srcLen + 4);
+        var newArray = newAttrib.array;
 
         for (var i = 0; i < srcLen; ++i) {
             newArray[i] = arr[i];
@@ -25731,9 +25739,12 @@ MultiBufferGeometry.prototype = Object.assign(Object.create(InstancedBufferGeome
         newArray[srcLen + 2] = m2;
         newArray[srcLen + 3] = m3;
 
-        attrib.array = newArray;
-        attrib.needsUpdate = true;
-        ++attrib.count;
+        return newAttrib;
+    },
+
+    _createMatrixAttrib: function(length)
+    {
+        return new InstancedBufferAttribute(new Float32Array(length || []), 4, 1).setDynamic(true);
     }
 
 });
@@ -25752,8 +25763,6 @@ function MultiMesh(geometry, material)
     this.type = 'MultiMesh';
     this._worldMatrices = [];
     this._allMatricesInvalid = false;
-
-    // TODO: Need to assign transforms per instance
 }
 
 MultiMesh.prototype = Object.assign( Object.create( Mesh.prototype ), {

@@ -16,8 +16,6 @@ function MultiMesh(geometry, material)
     this.type = 'MultiMesh';
     this._worldMatrices = [];
     this._allMatricesInvalid = false;
-
-    // TODO: Need to assign transforms per instance
 }
 
 MultiMesh.prototype = Object.assign( Object.create( Mesh.prototype ), {
