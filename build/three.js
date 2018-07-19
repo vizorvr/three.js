@@ -25609,6 +25609,12 @@
 	        delete this.idToIndex[id];
 	        this.indexToID.splice(index, 1);
 
+	        for (var key in this.idToIndex) {
+	            if (this.idToIndex[key] > index) {
+	                --this.idToIndex[key];
+	            }
+	        }
+
 	        --this.maxInstancedCount;
 
 	        this._matAttrib0 = this._removeInstanceAttribData(this._matAttrib0, index);
