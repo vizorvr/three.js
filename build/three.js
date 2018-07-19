@@ -25785,9 +25785,9 @@
 
 	    destroyInstance: function(id)
 	    {
-	        this.geometry.destroyInstance(id);
 	        var index = this.geometry.idToIndex[id];
 	        this._worldMatrices.splice(index, 1);
+	        this.geometry.destroyInstance(id);
 	    },
 
 	    setMatrix: function (id, matrix)
