@@ -14,6 +14,7 @@ function MultiMesh(geometry, material)
     Mesh.call(this, bufferGeometry, material);
 
     this.type = 'MultiMesh';
+    this.frustumCulled = false;
     this._worldMatrices = [];
     this._allMatricesInvalid = false;
 }

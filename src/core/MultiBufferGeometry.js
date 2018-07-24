@@ -10,7 +10,6 @@ function MultiBufferGeometry()
 
     // at least use the one instance
     this.maxInstancedCount = 0;
-    this.frustumCulled = false;
 
     // every instance has an ID that doesn't change as objects are added or removed
     // this is because removing random objects change the instance index
